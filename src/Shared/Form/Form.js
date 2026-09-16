@@ -1,6 +1,14 @@
 import React from "react";
+import useAuth from "../../hooks/useAuth";
+
+const inputClass =
+  "block w-full rounded-xl border border-ink/10 bg-sand-100 px-4 py-3 text-sm text-ink placeholder:text-ink/40 transition-colors focus:border-pine-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pine-500/20";
+
+const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink/50";
 
 const Form = ({ matchData }) => {
+  const { user } = useAuth();
+
   const handleAddTask = (e) => {
     e.preventDefault();
     const username = e.target.username.value;
@@ -26,132 +34,82 @@ const Form = ({ matchData }) => {
         e.target.reset();
       });
   };
+
   return (
     <div>
-      <div>
-        <div className="text-xl font-bold text-center ">
-          {" "}
-          Selected Package: {matchData?.packageName}
+      <p className="text-xs font-bold uppercase tracking-widest text-coral-500">
+        Book Now
+      </p>
+      <h2 className="mt-1 font-display text-xl font-semibold text-ink">
+        Selected Package: {matchData?.packageName}
+      </h2>
+
+      <form onSubmit={handleAddTask} className="mt-6 space-y-4">
+        <div>
+          <label htmlFor="booking-username" className={labelClass}>
+            Full Name
+          </label>
+          <input
+            type="text"
+            className={inputClass}
+            id="booking-username"
+            name="username"
+            placeholder="Enter your full name"
+            defaultValue={user?.name || ""}
+            required
+          />
         </div>
 
-        <div className="flex p-6 mx-auto rounded-lg shadow-lg bg-white max-w-sm justify-center">
-          <form onSubmit={handleAddTask}>
-            <div className="form-group mb-6">
-              <input
-                type="text"
-                className="form-control block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                id="exampleInput90"
-                name="username"
-                placeholder="Enter your Full Name"
-              />
-            </div>
-            <div className="form-group mb-6">
-              <input
-                type="text"
-                className="form-control block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                id="exampleInput90"
-                name="email"
-                placeholder="Your email"
-              />
-            </div>
-            <div className="form-group mb-6">
-              <input
-                type="number"
-                name="contact"
-                className="form-control block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                id="exampleInput91"
-                placeholder="Mobile Number"
-              />
-            </div>
-
-            <div className="form-group mb-6">
-              <input
-                type="text"
-                name="address"
-                className="form-control block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                id="exampleInput91"
-                placeholder="Address"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="
-      w-full
-      px-6
-      py-2.5
-      bg-blue-600
-      text-white
-      font-medium
-      text-xs
-      leading-tight
-      uppercase
-      rounded
-      shadow-md
-      hover:bg-blue-700 hover:shadow-lg
-      focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
-      active:bg-blue-800 active:shadow-lg
-      transition
-      duration-150
-      ease-in-out"
-            >
-              Submit
-            </button>
-          </form>
+        <div>
+          <label htmlFor="booking-email" className={labelClass}>
+            Email
+          </label>
+          <input
+            type="email"
+            className={inputClass}
+            id="booking-email"
+            name="email"
+            placeholder="you@example.com"
+            defaultValue={user?.email || ""}
+            required
+          />
         </div>
-      </div>
+
+        <div>
+          <label htmlFor="booking-contact" className={labelClass}>
+            Mobile Number
+          </label>
+          <input
+            type="tel"
+            name="contact"
+            className={inputClass}
+            id="booking-contact"
+            placeholder="01XXXXXXXXX"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="booking-address" className={labelClass}>
+            Address
+          </label>
+          <input
+            type="text"
+            name="address"
+            className={inputClass}
+            id="booking-address"
+            placeholder="Your address"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full rounded-full bg-coral-500 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-coral-600 hover:shadow-glow"
+        >
+          Confirm Booking
+        </button>
+      </form>
     </div>
   );
 };

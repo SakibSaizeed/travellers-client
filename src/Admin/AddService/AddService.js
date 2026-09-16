@@ -1,5 +1,10 @@
 import React from "react";
 
+const inputClass =
+  "block w-full rounded-xl border border-ink/10 bg-sand-100 px-4 py-3 text-sm text-ink placeholder:text-ink/40 transition-colors focus:border-pine-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pine-500/20";
+
+const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink/50";
+
 const AddService = () => {
   const handleAddTask = (e) => {
     e.preventDefault();
@@ -25,132 +30,90 @@ const AddService = () => {
         e.target.reset();
       });
   };
+
   return (
-    <div>
-      <div>
-        <div className="text-3xl font-bold text-center m-5">Add A Package</div>
+    <section className="bg-sand-100 px-4 py-16 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-lg">
+        <div className="text-center">
+          <span className="text-xs font-bold uppercase tracking-widest text-pine-600">
+            Admin
+          </span>
+          <h1 className="mt-2 font-display text-3xl font-semibold text-ink">
+            Add a Tour Package
+          </h1>
+          <p className="mt-2 text-sm text-ink/60">
+            Publish a new package so it shows up for travellers to book.
+          </p>
+        </div>
 
-        <div className="flex p-6 mx-auto rounded-lg shadow-lg bg-white max-w-sm justify-center">
-          <form onSubmit={handleAddTask}>
-            <div className="form-group mb-6">
+        <div className="mt-8 rounded-3xl bg-white p-7 shadow-card">
+          <form onSubmit={handleAddTask} className="space-y-4">
+            <div>
+              <label htmlFor="add-package-name" className={labelClass}>
+                Package Name
+              </label>
               <input
                 type="text"
-                className="form-control block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                id="exampleInput90"
+                className={inputClass}
+                id="add-package-name"
                 name="packageName"
-                placeholder="Package Name"
+                placeholder="e.g. Sajek Valley Getaway"
+                required
               />
             </div>
 
-            <div className="form-group mb-6">
-              <input
-                type="text"
-                name="description"
-                className="form-control block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                id="exampleInput91"
-                placeholder="Tour Description"
-              />
-            </div>
-
-            <div className="form-group mb-6">
+            <div>
+              <label htmlFor="add-destination" className={labelClass}>
+                Destination
+              </label>
               <input
                 type="text"
                 name="destination"
-                className="form-control block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                id="exampleInput91"
-                placeholder="Destination"
+                className={inputClass}
+                id="add-destination"
+                placeholder="e.g. Sajek, Rangamati"
+                required
               />
             </div>
 
-            <div className="form-group mb-6">
+            <div>
+              <label htmlFor="add-price" className={labelClass}>
+                Price (BDT)
+              </label>
               <input
                 type="number"
                 name="price"
-                className="form-control block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        m-0
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                id="exampleInput91"
-                placeholder="Package Price (/BDT)"
+                className={inputClass}
+                id="add-price"
+                placeholder="e.g. 5000"
+                min="0"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="add-description" className={labelClass}>
+                Tour Description
+              </label>
+              <textarea
+                name="description"
+                className={`${inputClass} min-h-[100px] resize-none`}
+                id="add-description"
+                placeholder="What makes this trip worth booking?"
+                required
               />
             </div>
 
             <button
               type="submit"
-              className="
-      w-full
-      px-6
-      py-2.5
-      bg-blue-600
-      text-white
-      font-medium
-      text-xs
-      leading-tight
-      uppercase
-      rounded
-      shadow-md
-      hover:bg-blue-700 hover:shadow-lg
-      focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
-      active:bg-blue-800 active:shadow-lg
-      transition
-      duration-150
-      ease-in-out"
+              className="w-full rounded-full bg-pine-700 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-sand shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-pine-800 hover:shadow-glow"
             >
-              Submit
+              Publish Package
             </button>
           </form>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

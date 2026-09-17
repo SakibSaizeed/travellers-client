@@ -31,6 +31,9 @@ const Hero = () => {
         style={{ backgroundImage: `url(${background})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/70 to-ink" />
+      {/* Extra horizontal scrim so the text column stays readable over the photo
+          regardless of how bright that patch of the image is. */}
+      <div className="absolute inset-0 bg-gradient-to-r from-ink/75 via-ink/35 to-transparent lg:via-ink/25 lg:to-transparent" />
       <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-coral-500/20 blur-3xl animate-float-slow" />
       <div className="pointer-events-none absolute -left-16 bottom-10 h-64 w-64 rounded-full bg-pine-400/20 blur-3xl animate-float" />
 
@@ -45,7 +48,7 @@ const Hero = () => {
             <span className="text-coral-400">Hidden Wonders</span>
           </h1>
 
-          <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-sand/75 sm:text-lg lg:mx-0">
+          <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-sand/90 sm:text-lg lg:mx-0">
             From the rolling hills of Sajek to the mangrove creeks of the
             Sundarbans — handpicked itineraries, local experts, zero hassle.
             Your next story starts here.
@@ -72,7 +75,7 @@ const Hero = () => {
                 <p className="font-display text-2xl font-bold text-sand sm:text-3xl">
                   {stat.value}
                 </p>
-                <p className="mt-1 text-xs text-sand/60 sm:text-sm">{stat.label}</p>
+                <p className="mt-1 text-xs text-sand/80 sm:text-sm">{stat.label}</p>
               </div>
             ))}
           </div>

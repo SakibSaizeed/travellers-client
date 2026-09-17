@@ -16,7 +16,8 @@ const Mybooking = () => {
             Log In To See Your Bookings
           </h1>
           <p className="mt-2 text-sm text-ink/60">
-            We match your bookings by the email you sign in with.
+            We match your bookings to your account, not the email you typed on
+            the booking form.
           </p>
           <Link
             to="/login"
@@ -29,9 +30,10 @@ const Mybooking = () => {
     );
   }
 
-  const myBookings = bookings.filter(
-    (booking) => booking.email?.toLowerCase() === user.email.toLowerCase()
-  );
+  // The server already scopes GET /bookingdata to this account (via the JWT), so no
+  // client-side filtering here — filtering by the form's editable "email" field would
+  // wrongly hide bookings made with a different contact email.
+  const myBookings = bookings;
 
   return (
     <section className="bg-sand-100 px-4 py-16 sm:px-6 lg:px-10">

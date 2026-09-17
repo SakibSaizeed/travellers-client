@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { getPackagePhoto } from "../utils/content";
+import { resolvePackagePhoto } from "../utils/content";
+import StarRating from "../Shared/StarRating/StarRating";
 
 const PinIcon = () => (
   <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
@@ -10,9 +11,9 @@ const PinIcon = () => (
 );
 
 const InfoCard = ({ special }) => {
-  const { packageName, destination, price, description, _id } = special;
+  const { packageName, destination, rating, price, description, _id } = special;
   const navigate = useNavigate();
-  const photo = getPackagePhoto(_id ?? packageName);
+  const photo = resolvePackagePhoto(special);
   const priceLabel = Number(price);
 
   return (
@@ -35,6 +36,7 @@ const InfoCard = ({ special }) => {
           <PinIcon />
           {destination}
         </div>
+        <StarRating rating={rating} className="mt-1.5" />
         <h3 className="mt-2 font-display text-xl font-semibold text-ink">{packageName}</h3>
         <p
           className="mt-2 text-sm leading-relaxed text-ink/60"

@@ -1,9 +1,22 @@
 import React from "react";
+import { invalidateServicesCache } from "../../hooks/useServices";
+import { API_BASE_URL } from "../../utils/api";
 
 const inputClass =
   "block w-full rounded-xl border border-ink/10 bg-sand-100 px-4 py-3 text-sm text-ink placeholder:text-ink/40 transition-colors focus:border-pine-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pine-500/20";
 
 const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink/50";
+
+const categoryOptions = [
+  "Beach",
+  "Adventure",
+  "Mountain",
+  "Wildlife",
+  "Nature",
+  "Cultural",
+  "City",
+  "Cruise",
+];
 
 const AddService = () => {
   const handleAddTask = (e) => {
@@ -11,12 +24,12 @@ const AddService = () => {
     const packageName = e.target.packageName.value;
     const price = e.target.price.value;
     const destination = e.target.destination.value;
+    const category = e.target.category.value;
     const description = e.target.description.value;
 
-    const inputdata = { packageName, destination, price, description };
+    const inputdata = { packageName, destination, category, price, description };
 
-    const url = "https://travellers.onrender.com/servicedata";
-    fetch(url, {
+    fetch(`${API_BASE_URL}/servicedata`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,9 +38,13 @@ const AddService = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("done", data);
+        invalidateServicesCache();
         alert("Service Added");
         e.target.reset();
+      })
+      .catch((error) => {
+        console.error("Failed to add service:", error);
+        alert("Couldn't add this package. Please try again.");
       });
   };
 
@@ -74,6 +91,28 @@ const AddService = () => {
                 placeholder="e.g. Sajek, Rangamati"
                 required
               />
+            </div>
+
+            <div>
+              <label htmlFor="add-category" className={labelClass}>
+                Category
+              </label>
+              <select
+                name="category"
+                className={inputClass}
+                id="add-category"
+                defaultValue=""
+                required
+              >
+                <option value="" disabled>
+                  Select a category
+                </option>
+                {categoryOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>

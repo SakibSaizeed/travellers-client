@@ -1,5 +1,6 @@
 import React from "react";
-import useServices from "../../hooks/useServices";
+import useServices, { invalidateServicesCache } from "../../hooks/useServices";
+import { API_BASE_URL } from "../../utils/api";
 import AdminCard from "./AdminCard";
 
 const ManageService = () => {
@@ -10,17 +11,22 @@ const ManageService = () => {
       "Are you sure you want to delete this package?"
     );
     if (confirmAlert) {
-      const url = `https://travellers.onrender.com/services/${id}`;
-      fetch(url, {
+      fetch(`${API_BASE_URL}/services/${id}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
         .then((result) => {
-          console.log(result);
           if (result.deletedCount > 0) {
             const remain = services.filter((service) => service._id !== id);
             setServices(remain);
+            invalidateServicesCache();
+          } else {
+            alert("Couldn't delete this package. Please try again.");
           }
+        })
+        .catch((error) => {
+          console.error("Delete failed:", error);
+          alert("Couldn't delete this package. Please try again.");
         });
     }
   };

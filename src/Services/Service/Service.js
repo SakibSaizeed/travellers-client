@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { getPackagePhoto } from "../../utils/content";
+import { resolvePackagePhoto } from "../../utils/content";
+import StarRating from "../../Shared/StarRating/StarRating";
 
 const PinIcon = () => (
   <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
@@ -10,9 +11,9 @@ const PinIcon = () => (
 );
 
 const Service = ({ service }) => {
-  const { packageName, destination, price, description, _id } = service;
+  const { packageName, destination, category, rating, price, description, _id } = service;
   const navigate = useNavigate();
-  const photo = getPackagePhoto(_id ?? packageName);
+  const photo = resolvePackagePhoto(service);
   const priceLabel = Number(price);
 
   return (
@@ -24,15 +25,23 @@ const Service = ({ service }) => {
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent" />
+        {category && (
+          <span className="absolute left-4 top-4 rounded-full bg-ink/70 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-sand backdrop-blur-sm">
+            {category}
+          </span>
+        )}
         <span className="absolute right-4 top-4 rounded-full bg-coral-500 px-3 py-1 text-xs font-bold text-white shadow-soft">
           {Number.isFinite(priceLabel) ? `৳${priceLabel.toLocaleString()}` : price}
         </span>
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-pine-600">
-          <PinIcon />
-          {destination}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-pine-600">
+            <PinIcon />
+            {destination}
+          </div>
+          <StarRating rating={rating} />
         </div>
         <h3 className="mt-2 font-display text-xl font-semibold text-ink">{packageName}</h3>
         <p

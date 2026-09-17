@@ -6,7 +6,6 @@ import Home from "./Home/Home";
 import Login from "./Login/Login";
 import Mybooking from "./MyBooking/Mybooking";
 import AllServices from "./Services/AllServices/AllServices";
-import Service from "./Services/Service/Service";
 import ServiceDetails from "./Services/ServiceDetails/ServiceDetails";
 import Footer from "./Shared/Footer/Footer";
 import Header from "./Shared/Header/Header";
@@ -24,7 +23,6 @@ function App() {
           <Route path="/slider" element={<Slider />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/allservices" element={<AllServices />}></Route>
-          <Route path="/service" element={<Service />}></Route>
           <Route path="/service/:_id" element={<ServiceDetails />}></Route>
           <Route path="/addservice" element={<AddService />}></Route>
           <Route path="/manageservice" element={<ManageService />}></Route>

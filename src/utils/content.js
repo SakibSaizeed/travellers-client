@@ -25,6 +25,15 @@ export const getPackagePhoto = (seed = 0) => {
   return destinationGallery[index % destinationGallery.length];
 };
 
+// Prefer a real photo when the service document has one (e.g. seeded tours with an
+// `img` URL); fall back to the deterministic local gallery photo otherwise.
+export const resolvePackagePhoto = (service = {}) => {
+  if (service.img) {
+    return { image: service.img, label: service.destination || service.packageName };
+  }
+  return getPackagePhoto(service._id ?? service.packageName);
+};
+
 export const features = [
   {
     title: "Curated Itineraries",

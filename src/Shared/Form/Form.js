@@ -1,5 +1,6 @@
 import React from "react";
 import useAuth from "../../hooks/useAuth";
+import { API_BASE_URL } from "../../utils/api";
 
 const inputClass =
   "block w-full rounded-xl border border-ink/10 bg-sand-100 px-4 py-3 text-sm text-ink placeholder:text-ink/40 transition-colors focus:border-pine-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pine-500/20";
@@ -19,8 +20,7 @@ const Form = ({ matchData }) => {
 
     const totalInputData = { username, email, contact, packname, address };
 
-    const url = "https://travellers.onrender.com/bookingdata";
-    fetch(url, {
+    fetch(`${API_BASE_URL}/bookingdata`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,10 +28,13 @@ const Form = ({ matchData }) => {
       body: JSON.stringify(totalInputData),
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log("done", data);
+      .then(() => {
         alert("Thank you for Booking.");
         e.target.reset();
+      })
+      .catch((error) => {
+        console.error("Booking failed:", error);
+        alert("Couldn't submit your booking. Please try again.");
       });
   };
 

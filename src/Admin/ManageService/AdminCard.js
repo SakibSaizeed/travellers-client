@@ -1,5 +1,5 @@
 import React from "react";
-import { getPackagePhoto } from "../../utils/content";
+import { resolvePackagePhoto } from "../../utils/content";
 
 const PinIcon = () => (
   <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
@@ -10,7 +10,7 @@ const PinIcon = () => (
 
 const AdminCard = ({ manageservice, handleDelete }) => {
   const { packageName, destination, price, _id } = manageservice;
-  const photo = getPackagePhoto(_id ?? packageName);
+  const photo = resolvePackagePhoto(manageservice);
   const priceLabel = Number(price);
 
   return (

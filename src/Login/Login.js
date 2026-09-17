@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import Spinner from "../Shared/Spinner/Spinner";
 import { API_BASE_URL } from "../utils/api";
 
 const inputClass =
@@ -124,8 +125,9 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full rounded-full bg-coral-500 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-coral-600 hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-coral-500 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-coral-600 hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-60"
               >
+                {submitting && <Spinner size="sm" tone="light" />}
                 {submitting ? "Logging In..." : "Log In"}
               </button>
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { resolvePackagePhoto } from "../../utils/content";
+import Spinner from "../../Shared/Spinner/Spinner";
 
 const PinIcon = () => (
   <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
@@ -8,7 +9,7 @@ const PinIcon = () => (
   </svg>
 );
 
-const AdminCard = ({ manageservice, handleDelete }) => {
+const AdminCard = ({ manageservice, handleDelete, deleting = false }) => {
   const { packageName, destination, price, _id } = manageservice;
   const photo = resolvePackagePhoto(manageservice);
   const priceLabel = Number(price);
@@ -44,9 +45,11 @@ const AdminCard = ({ manageservice, handleDelete }) => {
         <button
           type="button"
           onClick={() => handleDelete(_id)}
-          className="flex-1 rounded-full bg-red-50 px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-red-600 transition-colors duration-300 hover:bg-red-100 sm:flex-none"
+          disabled={deleting}
+          className="flex flex-1 items-center justify-center gap-2 rounded-full bg-red-50 px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-red-600 transition-colors duration-300 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none"
         >
-          Delete
+          {deleting && <Spinner size="sm" tone="danger" />}
+          {deleting ? "Deleting..." : "Delete"}
         </button>
       </div>
     </div>

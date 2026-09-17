@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import useServices from "../../hooks/useServices";
 import Form from "../../Shared/Form/Form";
+import PageLoader from "../../Shared/PageLoader/PageLoader";
 import StarRating from "../../Shared/StarRating/StarRating";
 import { resolvePackagePhoto } from "../../utils/content";
 import Service from "../Service/Service";
@@ -60,11 +61,7 @@ const ServiceDetails = () => {
   }
 
   if (loading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center px-4">
-        <p className="text-sm font-semibold text-ink/50">Loading package details...</p>
-      </div>
-    );
+    return <PageLoader message="Loading package details..." minHeight="min-h-[60vh]" />;
   }
 
   if (!matchData) {

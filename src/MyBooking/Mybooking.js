@@ -2,11 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useBookings from "../hooks/useBookings";
+import PageLoader from "../Shared/PageLoader/PageLoader";
 import { getPackagePhoto } from "../utils/content";
 
 const Mybooking = () => {
   const { user, token } = useAuth();
-  const [bookings] = useBookings(token);
+  const [bookings, , { loading, error }] = useBookings(token);
 
   if (!user) {
     return (
@@ -26,6 +27,24 @@ const Mybooking = () => {
             Go To Login
           </Link>
         </div>
+      </section>
+    );
+  }
+
+  if (loading) {
+    return (
+      <section className="bg-sand-100 px-4 py-16 sm:px-6 lg:px-10">
+        <PageLoader message="Loading your bookings..." />
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="bg-sand-100 px-4 py-16 text-center sm:px-6 lg:px-10">
+        <p className="text-sm font-semibold text-ink/60">
+          Couldn't load your bookings. Please refresh the page.
+        </p>
       </section>
     );
   }

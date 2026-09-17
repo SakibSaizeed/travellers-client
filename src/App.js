@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import AddService from "./Admin/AddService/AddService";
 import ManageService from "./Admin/ManageService/ManageService";
 import "./App.css";
@@ -11,15 +11,21 @@ import ServiceDetails from "./Services/ServiceDetails/ServiceDetails";
 import Footer from "./Shared/Footer/Footer";
 import Header from "./Shared/Header/Header";
 import RequireAuth from "./Shared/RequireAuth/RequireAuth";
+import RouteProgress from "./Shared/RouteProgress/RouteProgress";
 import Slider from "./Slider/Slider";
 import { AuthProvider } from "./hooks/useAuth";
 
-function App() {
-  return (
-    <AuthProvider>
-      <div>
-        <Header />
+const AppRoutes = () => {
+  const location = useLocation();
 
+  return (
+    <div>
+      <RouteProgress />
+      <Header />
+
+      {/* Keyed by path so every navigation (including a RequireAuth redirect to
+          /login) fades in instead of cutting straight to the next page. */}
+      <main key={location.pathname} className="animate-fade-in">
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/slider" element={<Slider />}></Route>
@@ -52,8 +58,16 @@ function App() {
             }
           ></Route>
         </Routes>
-        <Footer />
-      </div>
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppRoutes />
     </AuthProvider>
   );
 }

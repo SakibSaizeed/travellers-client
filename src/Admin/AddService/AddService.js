@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { invalidateServicesCache } from "../../hooks/useServices";
 import useAuth from "../../hooks/useAuth";
+import Spinner from "../../Shared/Spinner/Spinner";
 import { API_BASE_URL } from "../../utils/api";
 
 const inputClass =
@@ -21,6 +22,7 @@ const categoryOptions = [
 
 const AddService = () => {
   const { token } = useAuth();
+  const [submitting, setSubmitting] = useState(false);
 
   const handleAddTask = (e) => {
     e.preventDefault();
@@ -32,6 +34,8 @@ const AddService = () => {
 
     const inputdata = { packageName, destination, category, price, description };
 
+    setSubmitting(true);
+
     fetch(`${API_BASE_URL}/servicedata`, {
       method: "POST",
       headers: {
@@ -41,7 +45,7 @@ const AddService = () => {
       body: JSON.stringify(inputdata),
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then(() => {
         invalidateServicesCache();
         alert("Service Added");
         e.target.reset();
@@ -49,7 +53,8 @@ const AddService = () => {
       .catch((error) => {
         console.error("Failed to add service:", error);
         alert("Couldn't add this package. Please try again.");
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -149,9 +154,11 @@ const AddService = () => {
 
             <button
               type="submit"
-              className="w-full rounded-full bg-pine-700 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-sand shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-pine-800 hover:shadow-glow"
+              disabled={submitting}
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-pine-700 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-sand shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-pine-800 hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Publish Package
+              {submitting && <Spinner size="sm" tone="light" />}
+              {submitting ? "Publishing..." : "Publish Package"}
             </button>
           </form>
         </div>

@@ -46,12 +46,17 @@ module.exports = {
       },
       animation: {
         "fade-up": "fadeUp 0.8s ease forwards",
+        "fade-in": "fadeIn 0.35s ease forwards",
         float: "float 6s ease-in-out infinite",
         "float-slow": "float 9s ease-in-out infinite",
       },
       keyframes: {
         fadeUp: {
           "0%": { opacity: 0, transform: "translateY(28px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
+        },
+        fadeIn: {
+          "0%": { opacity: 0, transform: "translateY(6px)" },
           "100%": { opacity: 1, transform: "translateY(0)" },
         },
         float: {

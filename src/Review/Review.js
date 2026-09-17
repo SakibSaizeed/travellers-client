@@ -1,37 +1,49 @@
 import React from "react";
+import { testimonials } from "../utils/content";
 
-const Review = () => {
-  return (
-    <div>
-      <div className="card w-96 bg-base-100 shadow-xl">
-        <div className="card-body">
-          <h2 className="card-title">Card title!</h2>
-          <div className="avatar">
-            <div className="w-24 mask mask-squircle">
-              <img src="https://placeimg.com/192/192/people" />
+const StarIcon = ({ filled }) => (
+  <svg viewBox="0 0 20 20" className={`h-4 w-4 ${filled ? "fill-coral-400" : "fill-ink/15"}`}>
+    <path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z" />
+  </svg>
+);
+
+const Testimonials = () => (
+  <section className="bg-sand-100 px-4 py-20 sm:px-6 lg:px-10">
+    <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-xl text-center">
+        <span className="text-xs font-bold uppercase tracking-widest text-coral-500">
+          Testimonials
+        </span>
+        <h2 className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl">
+          Loved By Travellers
+        </h2>
+      </div>
+
+      <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {testimonials.map((review) => (
+          <div
+            key={review.name}
+            className="flex flex-col rounded-3xl bg-white p-7 shadow-card"
+          >
+            <div className="flex gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <StarIcon key={i} filled={i < review.rating} />
+              ))}
+            </div>
+            <p className="mt-4 flex-1 text-sm leading-relaxed text-ink/70">
+              "{review.quote}"
+            </p>
+            <div className="mt-6 border-t border-ink/10 pt-4">
+              <p className="font-display text-sm font-semibold text-ink">
+                {review.name}
+              </p>
+              <p className="text-xs text-ink/50">{review.trip}</p>
             </div>
           </div>
-          <p>If a dog chews shoes whose shoes does he choose?</p>
-          <div className="rating rating-lg">
-            <input type="radio" name="rating-9" className="rating-hidden" />
-            <input type="radio" name="rating-9" className="mask mask-star-2" />
-            <input
-              type="radio"
-              name="rating-9"
-              className="mask mask-star-2"
-              checked
-            />
-            <input type="radio" name="rating-9" className="mask mask-star-2" />
-            <input type="radio" name="rating-9" className="mask mask-star-2" />
-            <input type="radio" name="rating-9" className="mask mask-star-2" />
-          </div>
-          <div className="card-actions justify-end">
-            <button className="btn btn-primary">Buy Now</button>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
-  );
-};
+  </section>
+);
 
-export default Review;
+export default Testimonials;

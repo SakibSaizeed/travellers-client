@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 
-// A thin top-of-page progress bar that plays briefly on every route change (including a
-// RequireAuth redirect to /login). Gives every navigation a visible transition instead of
-// an instant, jarring cut from one page straight to another.
-const RouteProgress = () => {
-  const { pathname } = useLocation();
+// A thin top-of-page progress bar that plays briefly on every route change. Takes the
+// *effective* pathname from App (which collapses a RequireAuth redirect to /login into
+// a single destination) so it plays once per navigation instead of twice.
+const RouteProgress = ({ pathname }) => {
   const [phase, setPhase] = useState("idle"); // idle | growing | done
 
   useEffect(() => {

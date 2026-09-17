@@ -13,19 +13,32 @@ import Header from "./Shared/Header/Header";
 import RequireAuth from "./Shared/RequireAuth/RequireAuth";
 import RouteProgress from "./Shared/RouteProgress/RouteProgress";
 import Slider from "./Slider/Slider";
-import { AuthProvider } from "./hooks/useAuth";
+import useAuth, { AuthProvider } from "./hooks/useAuth";
+
+// Paths RequireAuth will bounce to /login when signed out — kept in sync with the
+// RequireAuth-wrapped routes below.
+const PROTECTED_PATHS = ["/addservice", "/manageservice", "/mybooking"];
 
 const AppRoutes = () => {
   const location = useLocation();
+  const { user } = useAuth();
+
+  // If this render is signed-out on a protected path, RequireAuth is about to redirect
+  // to /login on this same navigation. Treat the destination as /login for animation
+  // purposes now, instead of waiting for that redirect to land — otherwise `<main>`
+  // remounts (and replays its fade-in) once for the protected page and again a moment
+  // later for /login, which reads as a blink instead of one smooth transition.
+  const redirectingToLogin = !user && PROTECTED_PATHS.includes(location.pathname);
+  const animationKey = redirectingToLogin ? "/login" : location.pathname;
 
   return (
     <div>
-      <RouteProgress />
+      <RouteProgress pathname={animationKey} />
       <Header />
 
-      {/* Keyed by path so every navigation (including a RequireAuth redirect to
-          /login) fades in instead of cutting straight to the next page. */}
-      <main key={location.pathname} className="animate-fade-in">
+      {/* Keyed by the *effective* path so every real navigation fades in once,
+          including a RequireAuth redirect to /login. */}
+      <main key={animationKey} className="animate-fade-in">
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/slider" element={<Slider />}></Route>

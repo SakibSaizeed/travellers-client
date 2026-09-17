@@ -5,8 +5,8 @@ import useBookings from "../hooks/useBookings";
 import { getPackagePhoto } from "../utils/content";
 
 const Mybooking = () => {
-  const { user } = useAuth();
-  const [bookings] = useBookings();
+  const { user, token } = useAuth();
+  const [bookings] = useBookings(token);
 
   if (!user) {
     return (

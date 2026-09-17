@@ -1,6 +1,7 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { API_BASE_URL } from "../utils/api";
 
 const inputClass =
   "block w-full rounded-xl border border-ink/10 bg-sand-100 px-4 py-3 text-sm text-ink placeholder:text-ink/40 transition-colors focus:border-pine-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pine-500/20";
@@ -10,14 +11,36 @@ const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wide t
 const Login = () => {
   const { user, login, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const name = e.target.name.value.trim();
     const email = e.target.email.value.trim();
-    if (!name || !email) return;
-    login({ name, email });
-    navigate("/mybooking");
+    const password = e.target.password.value;
+
+    setError("");
+    setSubmitting(true);
+
+    fetch(`${API_BASE_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || "Failed to log in");
+        }
+        return data;
+      })
+      .then(({ user: profile, token }) => {
+        login(profile, token);
+        navigate(location.state?.from?.pathname || "/mybooking", { replace: true });
+      })
+      .catch((err) => setError(err.message))
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -25,7 +48,7 @@ const Login = () => {
       <div className="mx-auto w-full max-w-md">
         <div className="text-center">
           <span className="text-xs font-bold uppercase tracking-widest text-coral-500">
-            Welcome
+            Welcome Back
           </span>
           <h1 className="mt-2 font-display text-3xl font-semibold text-ink">
             {user ? "You're Signed In" : "Log In To Continue"}
@@ -33,7 +56,7 @@ const Login = () => {
           <p className="mt-2 text-sm text-ink/60">
             {user
               ? "Jump straight to your bookings, or sign out below."
-              : "No password needed yet — this starts a quick demo session so we can find your bookings."}
+              : "Sign in to book a trip and see your bookings."}
           </p>
         </div>
 
@@ -64,19 +87,11 @@ const Login = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="login-name" className={labelClass}>
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="login-name"
-                  name="name"
-                  className={inputClass}
-                  placeholder="Enter your full name"
-                  required
-                />
-              </div>
+              {error && (
+                <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">
+                  {error}
+                </p>
+              )}
 
               <div>
                 <label htmlFor="login-email" className={labelClass}>
@@ -92,12 +107,34 @@ const Login = () => {
                 />
               </div>
 
+              <div>
+                <label htmlFor="login-password" className={labelClass}>
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="login-password"
+                  name="password"
+                  className={inputClass}
+                  placeholder="Enter your password"
+                  required
+                />
+              </div>
+
               <button
                 type="submit"
-                className="w-full rounded-full bg-coral-500 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-coral-600 hover:shadow-glow"
+                disabled={submitting}
+                className="w-full rounded-full bg-coral-500 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-coral-600 hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Continue
+                {submitting ? "Logging In..." : "Log In"}
               </button>
+
+              <p className="text-center text-sm text-ink/60">
+                New here?{" "}
+                <Link to="/signup" className="font-semibold text-pine-700 hover:underline">
+                  Create an account
+                </Link>
+              </p>
             </form>
           )}
         </div>

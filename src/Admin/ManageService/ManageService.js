@@ -1,10 +1,12 @@
 import React from "react";
 import useServices, { invalidateServicesCache } from "../../hooks/useServices";
+import useAuth from "../../hooks/useAuth";
 import { API_BASE_URL } from "../../utils/api";
 import AdminCard from "./AdminCard";
 
 const ManageService = () => {
   const [services, setServices] = useServices([]);
+  const { token } = useAuth();
 
   const handleDelete = (id) => {
     const confirmAlert = window.confirm(
@@ -13,6 +15,7 @@ const ManageService = () => {
     if (confirmAlert) {
       fetch(`${API_BASE_URL}/services/${id}`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
         .then((result) => {

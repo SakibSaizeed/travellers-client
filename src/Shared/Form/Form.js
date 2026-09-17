@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { API_BASE_URL } from "../../utils/api";
 
@@ -8,7 +9,32 @@ const inputClass =
 const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink/50";
 
 const Form = ({ matchData }) => {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
+  const location = useLocation();
+  const [submitting, setSubmitting] = useState(false);
+
+  if (!user) {
+    return (
+      <div className="text-center">
+        <p className="text-xs font-bold uppercase tracking-widest text-coral-500">
+          Book Now
+        </p>
+        <h2 className="mt-1 font-display text-xl font-semibold text-ink">
+          Selected Package: {matchData?.packageName}
+        </h2>
+        <p className="mt-4 text-sm text-ink/60">
+          Log in to book this trip and track it under My Bookings.
+        </p>
+        <Link
+          to="/login"
+          state={{ from: location }}
+          className="mt-5 inline-block w-full rounded-full bg-coral-500 px-6 py-3.5 text-center text-sm font-bold uppercase tracking-wide text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-coral-600 hover:shadow-glow"
+        >
+          Log In To Book
+        </Link>
+      </div>
+    );
+  }
 
   const handleAddTask = (e) => {
     e.preventDefault();
@@ -20,10 +46,13 @@ const Form = ({ matchData }) => {
 
     const totalInputData = { username, email, contact, packname, address };
 
+    setSubmitting(true);
+
     fetch(`${API_BASE_URL}/bookingdata`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(totalInputData),
     })
@@ -35,7 +64,8 @@ const Form = ({ matchData }) => {
       .catch((error) => {
         console.error("Booking failed:", error);
         alert("Couldn't submit your booking. Please try again.");
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -108,9 +138,10 @@ const Form = ({ matchData }) => {
 
         <button
           type="submit"
-          className="w-full rounded-full bg-coral-500 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-coral-600 hover:shadow-glow"
+          disabled={submitting}
+          className="w-full rounded-full bg-coral-500 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-coral-600 hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Confirm Booking
+          {submitting ? "Booking..." : "Confirm Booking"}
         </button>
       </form>
     </div>

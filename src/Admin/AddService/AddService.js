@@ -1,5 +1,6 @@
 import React from "react";
 import { invalidateServicesCache } from "../../hooks/useServices";
+import useAuth from "../../hooks/useAuth";
 import { API_BASE_URL } from "../../utils/api";
 
 const inputClass =
@@ -19,6 +20,8 @@ const categoryOptions = [
 ];
 
 const AddService = () => {
+  const { token } = useAuth();
+
   const handleAddTask = (e) => {
     e.preventDefault();
     const packageName = e.target.packageName.value;
@@ -33,6 +36,7 @@ const AddService = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(inputdata),
     })

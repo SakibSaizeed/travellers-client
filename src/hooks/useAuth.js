@@ -1,28 +1,29 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 
-const STORAGE_KEY = "travellers_demo_user";
+const STORAGE_KEY = "travellers_auth";
 
-const readStoredUser = () => {
+const readStoredSession = () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
+    return raw ? JSON.parse(raw) : { user: null, token: null };
   } catch {
-    return null;
+    return { user: null, token: null };
   }
 };
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(readStoredUser);
+  const [session, setSession] = useState(readStoredSession);
 
-  const login = useCallback((profile) => {
+  const login = useCallback((profile, token) => {
+    const nextSession = { user: profile, token };
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextSession));
     } catch {
       // localStorage unavailable (e.g. private browsing) — session just won't persist across reloads
     }
-    setUser(profile);
+    setSession(nextSession);
   }, []);
 
   const logout = useCallback(() => {
@@ -31,11 +32,11 @@ export const AuthProvider = ({ children }) => {
     } catch {
       // ignore
     }
-    setUser(null);
+    setSession({ user: null, token: null });
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user: session.user, token: session.token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

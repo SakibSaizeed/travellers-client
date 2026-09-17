@@ -97,12 +97,20 @@ const Header = () => {
               </button>
             </>
           ) : (
-            <Link
-              to="/login"
-              className="rounded-full bg-ink px-6 py-2.5 text-sm font-semibold text-sand transition-all duration-300 hover:-translate-y-0.5 hover:bg-pine-700 hover:shadow-soft"
-            >
-              Login
-            </Link>
+            <>
+              <Link
+                to="/login"
+                className="text-sm font-semibold text-ink/70 transition-colors hover:text-pine-700"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="rounded-full bg-ink px-6 py-2.5 text-sm font-semibold text-sand transition-all duration-300 hover:-translate-y-0.5 hover:bg-pine-700 hover:shadow-soft"
+              >
+                Sign Up
+              </Link>
+            </>
           )}
         </div>
 
@@ -148,13 +156,22 @@ const Header = () => {
                 Logout ({user.name.split(" ")[0]})
               </button>
             ) : (
-              <Link
-                to="/login"
-                onClick={() => setMenuOpen(false)}
-                className="block rounded-xl bg-ink px-4 py-3 text-center text-sm font-semibold text-sand"
-              >
-                Login
-              </Link>
+              <div className="flex flex-col gap-2">
+                <Link
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="block rounded-xl border border-ink/10 px-4 py-3 text-center text-sm font-semibold text-ink/70"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  onClick={() => setMenuOpen(false)}
+                  className="block rounded-xl bg-ink px-4 py-3 text-center text-sm font-semibold text-sand"
+                >
+                  Sign Up
+                </Link>
+              </div>
             )}
           </li>
         </ul>
